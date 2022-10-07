@@ -1,0 +1,44 @@
+#include "image.h"
+#include <SDL2/SDL_surface.h>
+#include <stdlib.h>
+
+
+
+npImage init_image(unsigned int w, unsigned int h, npPixel color, SDL_Renderer *renderer) {
+  	
+	npImage image = {0};
+	image.w = w;
+	image.h = h;
+	image.pixels = malloc(sizeof(intptr_t) * image.h * image.w);
+	memset(image.pixels, 0, sizeof(npPixel) * image.h * image.w);
+
+	Uint32 rmask = 0x000000FF;
+	Uint32 gmask = 0x0000FF00;
+	Uint32 bmask = 0x00FF0000;
+	Uint32 amask = 0xFF000000;
+	
+	
+	SDL_Surface *tmp_surface = SDL_CreateRGBSurface(0, image.w, image.h, 32, rmask, gmask, bmask, amask);
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, tmp_surface);
+	
+
+	
+	for(unsigned int i=0; i<image.h; i++){	
+		for(unsigned int j=0; j<image.w; j++){
+			image.pixels[i * image.w + j].alpha = color.alpha;
+			image.pixels[i * image.w + j].red = color.red;
+			image.pixels[i * image.w + j].green = color.green;
+			image.pixels[i * image.w + j].blue = color.blue;
+			
+		}
+    }
+	
+	
+	SDL_UpdateTexture(texture, NULL, image.pixels, image.w * sizeof(npPixel));
+	image.texture = texture;
+
+	SDL_FreeSurface(tmp_surface);
+	
+	return image;
+
+}

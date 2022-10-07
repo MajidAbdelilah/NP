@@ -1,0 +1,20 @@
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_render.h>
+
+
+
+
+typedef struct npPixel {
+	unsigned char red, green, blue, alpha;
+} npPixel;
+
+typedef struct npImage {
+	npPixel *pixels;
+	unsigned int w;
+	unsigned int h;
+	SDL_Texture *texture;
+}npImage;
+
+
+
+npImage init_image(unsigned int w, unsigned int h, npPixel color, SDL_Renderer *renderer);
